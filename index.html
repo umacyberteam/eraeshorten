@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EraeShorten – Link Pendek</title>
+    <style>
+        /* ─── RESET & BASE ─── */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #0b1120;
+            color: #f1f5f9;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            transition: background 0.3s;
+        }
+
+        /* ─── CARD UTAMA ─── */
+        .card {
+            background: #1e293b;
+            padding: 40px 35px;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+            width: 100%;
+            max-width: 540px;
+            text-align: center;
+            border: 1px solid #334155;
+            transition: 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: #475569;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.9);
+        }
+
+        /* ─── HEADER ─── */
+        .card h1 {
+            font-size: 30px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 4px;
+        }
+
+        .card .sub {
+            color: #94a3b8;
+            margin-bottom: 28px;
+            font-size: 14px;
+            font-weight: 400;
+            letter-spacing: 0.2px;
+        }
+
+        .card .sub span {
+            color: #60a5fa;
+            font-weight: 500;
+        }
+
+        /* ─── INPUT ─── */
+        .input-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .input-wrap input {
+            width: 100%;
+            padding: 16px 18px;
+            border-radius: 14px;
+            border: 1px solid #334155;
+            background: #0f172a;
+            color: #f1f5f9;
+            font-size: 16px;
+            outline: none;
+            transition: 0.25s ease;
+        }
+
+        .input-wrap input::placeholder {
+            color: #64748b;
+            font-weight: 400;
+        }
+
+        .input-wrap input:focus {
+            border-color: #60a5fa;
+            box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.15);
+            background: #0b1320;
+        }
+
+        /* ─── BUTTON ─── */
+        .input-wrap button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border: none;
+            border-radius: 14px;
+            color: #fff;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.25s ease;
+            letter-spacing: 0.3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .input-wrap button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(59, 130, 246, 0.35);
+        }
+
+        .input-wrap button:active {
+            transform: scale(0.97);
+        }
+
+        .input-wrap button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        /* ─── SPINNER ─── */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2.5px solid rgba(255, 255, 255, 0.25);
+            border-top: 2.5px solid #fff;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ─── RESULT BOX ─── */
+        .result {
+            margin-top: 24px;
+            background: #0f172a;
+            padding: 18px 20px;
+            border-radius: 14px;
+            display: none;
+            word-break: break-all;
+            font-size: 15px;
+            border: 1px solid #334155;
+            transition: 0.3s ease;
+        }
+
+        .result.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result a {
+            color: #60a5fa;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .result a:hover {
+            text-decoration: underline;
+        }
+
+        .result .label {
+            color: #94a3b8;
+            font-size: 13px;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        /* ─── COPY BUTTON ─── */
+        .copy-btn {
+            margin-top: 12px;
+            padding: 10px 16px;
+            background: #334155;
+            border: none;
+            border-radius: 10px;
+            color: #f1f5f9;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 14px;
+            display: inline-block;
+        }
+
+        .copy-btn:hover {
+            background: #475569;
+        }
+
+        .copy-btn.copied {
+            background: #22c55e;
+            color: #fff;
+        }
+
+        /* ─── FOOTER ─── */
+        .footer {
+            margin-top: 28px;
+            font-size: 12px;
+            color: #475569;
+            border-top: 1px solid #1e293b;
+            padding-top: 18px;
+        }
+
+        .footer a {
+            color: #64748b;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            color: #94a3b8;
+        }
+
+        /* ─── ERROR ─── */
+        .error-msg {
+            color: #f87171;
+            font-size: 14px;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .error-msg.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>⚡ EraeShorten</h1>
+        <p class="sub">Bikin link pendek keren dalam <span>hitungan detik</span></p>
+
+        <div class="input-wrap">
+            <input type="url" id="longUrl" placeholder="https://contoh.com/artikel-panjang-banget" />
+            <button id="shortenBtn">
+                <span>🔗 Pendekin Sekarang</span>
+            </button>
+        </div>
+
+        <div class="error-msg" id="errorMsg"></div>
+
+        <div class="result" id="resultBox">
+            <span class="label">✨ Link pendek lu:</span>
+            <span id="shortLink"></span>
+            <div>
+                <button class="copy-btn" id="copyBtn">📋 Salin Link</button>
+            </div>
+        </div>
+
+        <div class="footer">
+            © 2026 <a href="#">EraeShorten</a> • by Aldiproject
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            const input = document.getElementById('longUrl');
+            const btn = document.getElementById('shortenBtn');
+            const resultBox = document.getElementById('resultBox');
+            const shortLink = document.getElementById('shortLink');
+            const copyBtn = document.getElementById('copyBtn');
+            const errorMsg = document.getElementById('errorMsg');
+
+            // ─── SHORTEN ───
+            btn.addEventListener('click', async () => {
+                const url = input.value.trim();
+
+                // Validasi
+                if (!url) {
+                    showError('Masukkan URL dulu, bos!');
+                    return;
+                }
+                if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                    showError('Pakai http:// atau https:// ya!');
+                    return;
+                }
+
+                hideError();
+                resultBox.classList.remove('show');
+                btn.disabled = true;
+                btn.innerHTML = `<span class="spinner"></span> Memproses...`;
+
+                try {
+                    const res = await fetch('/api/shorten', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ url })
+                    });
+
+                    const data = await res.json();
+
+                    if (!res.ok) {
+                        throw new Error(data.error || 'Gagal shorten');
+                    }
+
+                    const short = data.short;
+                    shortLink.innerHTML = `<a href="${short}" target="_blank">${short}</a>`;
+                    resultBox.classList.add('show');
+                    copyBtn.textContent = '📋 Salin Link';
+                    copyBtn.className = 'copy-btn';
+
+                } catch (err) {
+                    showError('Error: ' + err.message);
+                } finally {
+                    btn.disabled = false;
+                    btn.innerHTML = `<span>🔗 Pendekin Sekarang</span>`;
+                }
+            });
+
+            // ─── ENTER KEY ───
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    btn.click();
+                }
+            });
+
+            // ─── COPY ───
+            copyBtn.addEventListener('click', async () => {
+                const text = shortLink.textContent;
+                if (!text) return;
+
+                try {
+                    await navigator.clipboard.writeText(text);
+                    copyBtn.textContent = '✅ Tersalin!';
+                    copyBtn.className = 'copy-btn copied';
+                    setTimeout(() => {
+                        copyBtn.textContent = '📋 Salin Link';
+                        copyBtn.className = 'copy-btn';
+                    }, 2000);
+                } catch (_) {
+                    // Fallback
+                    const range = document.createRange();
+                    range.selectNode(shortLink);
+                    window.getSelection().removeAllRanges();
+                    window.getSelection().addRange(range);
+                    document.execCommand('copy');
+                    copyBtn.textContent = '✅ Tersalin!';
+                    setTimeout(() => {
+                        copyBtn.textContent = '📋 Salin Link';
+                    }, 2000);
+                }
+            });
+
+            // ─── HELPERS ───
+            function showError(msg) {
+                errorMsg.textContent = msg;
+                errorMsg.className = 'error-msg show';
+            }
+
+            function hideError() {
+                errorMsg.className = 'error-msg';
+            }
+
+            // ─── FOCUS ───
+            input.focus();
+
+            console.log('%c⚡ EraeShorten Active', 'font-size:16px; color:#60a5fa;');
+        })();
+    </script>
+
+</body>
+</html>
